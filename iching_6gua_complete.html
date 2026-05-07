@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주역 6괘 종합 탐구 — 이용근 교수</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1208;
+  --rice: #f5f0e8;
+  --gold: #c8963e;
+  --gold-light: #e8c068;
+  --gold-pale: rgba(200,150,62,0.12);
+
+  /* 그룹A: 지택림→풍지관→회뇌서함 */
+  --earth: #5c6e3a;      /* 지택림 — 땅·초록 */
+  --earth-light: #8aaa55;
+  --wind: #2c5f7a;       /* 풍지관 — 바람·청색 */
+  --wind-light: #5fa8c8;
+  --thunder: #6b3fa0;    /* 회뇌서함 — 뇌·보라 */
+  --thunder-light: #9b6fd4;
+
+  /* 그룹B: 뇌화풍→화산려→중풍손 */
+  --rich: #7a5c1e;       /* 뇌화풍 — 풍요·갈색금 */
+  --rich-light: #c8963e;
+  --fire: #c1440e;       /* 화산려 — 불·주홍 */
+  --fire-light: #e07b30;
+  --humble: #2d6a4f;     /* 중풍손 — 겸손·녹청 */
+  --humble-light: #52b788;
+
+  --stone: #8b7355;
+  --shadow: rgba(26,18,8,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--rice);
+  color: var(--ink);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+}
+
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(139,115,85,0.05) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(139,115,85,0.05) 40px);
+  pointer-events:none; z-index:0;
+}
+
+/* ══ HERO ══ */
+.hero {
+  position:relative;
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:4rem 2rem;
+  overflow:hidden;
+}
+
+.hero-bg-char {
+  position:absolute;
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(18rem,50vw,55rem);
+  color:rgba(139,115,85,0.055);
+  top:50%; left:50%;
+  transform:translate(-50%,-55%);
+  pointer-events:none; user-select:none; line-height:1;
+}
+
+.hero-tag {
+  font-size:0.72rem; font-weight:500;
+  letter-spacing:0.35em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:2rem;
+  opacity:0; animation:fadeUp 1s 0.3s forwards;
+}
+
+.hero-title {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(2rem,7vw,5.5rem);
+  font-weight:800; line-height:1.15;
+  opacity:0; animation:fadeUp 1s 0.5s forwards;
+}
+
+.hero-title .accent { color:var(--gold); }
+
+.hero-chains {
+  display:flex; align-items:center; justify-content:center;
+  flex-wrap:wrap; gap:0.6rem;
+  margin-top:2rem;
+  opacity:0; animation:fadeUp 1s 0.7s forwards;
+}
+
+.chain-pill {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.8rem; font-weight:600;
+  padding:0.45rem 1rem;
+  border-radius:999px;
+  border:1.5px solid;
+  white-space:nowrap;
+}
+
+.chain-arrow { color:var(--gold); font-size:1rem; }
+
+.hero-sub {
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(0.9rem,2vw,1.1rem);
+  font-weight:300; color:var(--stone);
+  margin-top:2rem; line-height:2;
+  max-width:640px;
+  opacity:0; animation:fadeUp 1s 0.9s forwards;
+}
+
+.hero-divider {
+  width:80px; height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:2.5rem auto 0;
+  opacity:0; animation:fadeUp 1s 1.1s forwards;
+}
+
+.scroll-hint {
+  position:absolute; bottom:2.5rem; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+  color:var(--stone); font-size:0.65rem; letter-spacing:0.2em;
+  opacity:0; animation:fadeUp 1s 1.8s forwards;
+}
+.scroll-line { width:1px; height:40px; background:linear-gradient(180deg,var(--gold),transparent); animation:pulse 2s infinite; }
+
+/* ══ GROUP NAV ══ */
+.group-nav {
+  position:sticky; top:0; z-index:200;
+  background:rgba(245,240,232,0.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(139,115,85,0.18);
+}
+
+.group-tabs {
+  display:flex; justify-content:center;
+  border-bottom:1px solid rgba(139,115,85,0.1);
+}
+
+.group-btn {
+  padding:1rem 2.5rem;
+  font-family:'Noto Serif KR',serif;
+  font-size:0.95rem; font-weight:700;
+  border:none; background:transparent; cursor:pointer;
+  color:var(--stone); position:relative;
+  transition:color 0.3s; white-space:nowrap;
+}
+.group-btn::after {
+  content:''; position:absolute; bottom:0; left:50%;
+  transform:translateX(-50%) scaleX(0);
+  width:60%; height:2.5px;
+  transition:transform 0.3s;
+}
+.group-btn.gA::after { background:var(--wind); }
+.group-btn.gB::after { background:var(--fire); }
+.group-btn.gc::after { background:var(--gold); }
+.group-btn.active { color:var(--ink); }
+.group-btn.active::after { transform:translateX(-50%) scaleX(1); }
+
+.sub-tabs {
+  display:flex; justify-content:center; gap:0;
+  padding:0 1rem;
+  overflow-x:auto;
+}
+
+.sub-btn {
+  padding:0.8rem 1.8rem;
+  font-family:'Noto Serif KR',serif;
+  font-size:0.82rem; font-weight:600;
+  border:none; background:transparent; cursor:pointer;
+  color:var(--stone); position:relative;
+  transition:color 0.3s; white-space:nowrap;
+}
+.sub-btn::after {
+  content:''; position:absolute; bottom:0; left:50%;
+  transform:translateX(-50%) scaleX(0);
+  width:70%; height:2px; background:var(--gold);
+  transition:transform 0.3s;
+}
+.sub-btn.active { color:var(--gold); }
+.sub-btn.active::after { transform:translateX(-50%) scaleX(1); }
+.sub-btn:hover { color:var(--gold); }
+
+/* ══ SECTIONS ══ */
+.section { display:none; position:relative; z-index:1; }
+.section.active { display:block; }
+
+/* ══ 괘 헤더 ══ */
+.gua-header {
+  padding:5rem 2rem 4rem;
+  text-align:center;
+  position:relative; overflow:hidden;
+}
+
+.gua-header .bg-hanja {
+  position:absolute;
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(12rem,30vw,22rem);
+  opacity:0.04; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none; user-select:none;
+  line-height:1;
+}
+
+.gua-header.earth-h  { background:linear-gradient(135deg,rgba(92,110,58,0.1),rgba(138,170,85,0.06)); }
+.gua-header.wind-h   { background:linear-gradient(135deg,rgba(44,95,122,0.1),rgba(95,168,200,0.06)); }
+.gua-header.thunder-h{ background:linear-gradient(135deg,rgba(107,63,160,0.1),rgba(155,111,212,0.06)); }
+.gua-header.rich-h   { background:linear-gradient(135deg,rgba(122,92,30,0.1),rgba(200,150,62,0.06)); }
+.gua-header.fire-h   { background:linear-gradient(135deg,rgba(193,68,14,0.1),rgba(224,123,48,0.06)); }
+.gua-header.humble-h { background:linear-gradient(135deg,rgba(45,106,79,0.1),rgba(82,183,136,0.06)); }
+
+.gua-number {
+  font-size:0.7rem; font-weight:500;
+  letter-spacing:0.3em; margin-bottom:1.5rem;
+  position:relative;
+}
+.earth-h   .gua-number { color:var(--earth); }
+.wind-h    .gua-number { color:var(--wind); }
+.thunder-h .gua-number { color:var(--thunder); }
+.rich-h    .gua-number { color:var(--rich); }
+.fire-h    .gua-number { color:var(--fire); }
+.humble-h  .gua-number { color:var(--humble); }
+
+.gua-hexagram {
+  font-size:4.5rem; line-height:1.1;
+  margin-bottom:1rem;
+  animation:float 6s ease-in-out infinite;
+  position:relative;
+}
+
+.gua-name-ko {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(2.2rem,6vw,4rem);
+  font-weight:800; margin-bottom:0.5rem;
+  position:relative;
+}
+.earth-h   .gua-name-ko { color:var(--earth); }
+.wind-h    .gua-name-ko { color:var(--wind); }
+.thunder-h .gua-name-ko { color:var(--thunder); }
+.rich-h    .gua-name-ko { color:var(--rich); }
+.fire-h    .gua-name-ko { color:var(--fire); }
+.humble-h  .gua-name-ko { color:var(--humble); }
+
+.gua-name-hanja {
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(0.9rem,2.5vw,1.2rem);
+  font-weight:300; color:var(--stone);
+  letter-spacing:0.1em; margin-bottom:2rem;
+  position:relative;
+}
+
+.gua-desc {
+  font-family:'Noto Serif KR',serif;
+  font-size:1rem; line-height:2.1;
+  color:var(--ink); max-width:720px;
+  margin:0 auto; font-weight:300;
+  position:relative;
+}
+
+/* ══ 흐름도 ══ */
+.flow-section {
+  padding:2.5rem 2rem;
+  max-width:960px; margin:0 auto;
+}
+
+.flow-label {
+  font-size:0.72rem; font-weight:500;
+  letter-spacing:0.28em; color:var(--gold);
+  text-align:center; margin-bottom:1.8rem;
+}
+
+.flow-grid {
+  display:grid;
+  grid-template-columns:1fr auto 1fr auto 1fr;
+  align-items:center; gap:1rem;
+}
+
+.flow-card {
+  background:white;
+  border:1px solid rgba(139,115,85,0.15);
+  border-radius:14px; padding:1.5rem 1rem;
+  text-align:center;
+  box-shadow:0 2px 16px var(--shadow);
+  transition:transform 0.3s;
+}
+.flow-card:hover { transform:translateY(-3px); }
+.flow-card.current {
+  border-width:2px;
+  box-shadow:0 6px 28px rgba(200,150,62,0.22);
+  transform:scale(1.06);
+}
+.flow-card.current:hover { transform:scale(1.06) translateY(-3px); }
+
+.flow-card .fhex { font-size:2rem; margin-bottom:0.4rem; }
+.flow-card .fname {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:0.95rem; font-weight:700; color:var(--ink);
+}
+.flow-card .fdesc {
+  font-size:0.7rem; color:var(--stone);
+  margin-top:0.3rem; line-height:1.5;
+}
+
+/* current border colors */
+.gua-earth   .flow-card.current { border-color:var(--earth); }
+.gua-wind    .flow-card.current { border-color:var(--wind); }
+.gua-thunder .flow-card.current { border-color:var(--thunder); }
+.gua-rich    .flow-card.current { border-color:var(--rich); }
+.gua-fire    .flow-card.current { border-color:var(--fire); }
+.gua-humble  .flow-card.current { border-color:var(--humble); }
+
+.flow-arrow { font-size:1.4rem; color:var(--gold); text-align:center; }
+
+/* ══ 6효 그리드 ══ */
+.yao-section {
+  padding:3rem 2rem 4rem;
+  max-width:960px; margin:0 auto;
+}
+
+.sec-heading {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1.7rem; font-weight:800;
+  color:var(--ink); text-align:center; margin-bottom:0.4rem;
+}
+.sec-sub {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.85rem; color:var(--stone);
+  text-align:center; margin-bottom:2.5rem; font-weight:300;
+}
+
+.yao-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.4rem;
+}
+
+.yao-card {
+  background:white;
+  border-radius:16px; padding:2rem 1.5rem;
+  border:1px solid rgba(139,115,85,0.1);
+  box-shadow:0 2px 18px var(--shadow);
+  position:relative; overflow:hidden;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+.yao-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 10px 36px var(--shadow);
+}
+.yao-card::before {
+  content:''; position:absolute;
+  top:0; left:0; width:4px; height:100%;
+  border-radius:16px 0 0 16px;
+}
+
+.gua-earth   .yao-card::before { background:linear-gradient(180deg,var(--earth),var(--earth-light)); }
+.gua-wind    .yao-card::before { background:linear-gradient(180deg,var(--wind),var(--wind-light)); }
+.gua-thunder .yao-card::before { background:linear-gradient(180deg,var(--thunder),var(--thunder-light)); }
+.gua-rich    .yao-card::before { background:linear-gradient(180deg,var(--rich),var(--rich-light)); }
+.gua-fire    .yao-card::before { background:linear-gradient(180deg,var(--fire),var(--fire-light)); }
+.gua-humble  .yao-card::before { background:linear-gradient(180deg,var(--humble),var(--humble-light)); }
+
+.yao-num {
+  font-size:0.62rem; font-weight:500;
+  letter-spacing:0.2em; color:var(--stone); margin-bottom:0.5rem;
+}
+.yao-title {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1.25rem; font-weight:800;
+  margin-bottom:0.7rem;
+}
+.gua-earth   .yao-title { color:var(--earth); }
+.gua-wind    .yao-title { color:var(--wind); }
+.gua-thunder .yao-title { color:var(--thunder); }
+.gua-rich    .yao-title { color:var(--rich); }
+.gua-fire    .yao-title { color:var(--fire); }
+.gua-humble  .yao-title { color:var(--humble); }
+
+.yao-body {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.86rem; line-height:1.9;
+  color:#444; font-weight:300;
+}
+.yao-icon {
+  position:absolute; top:1.2rem; right:1.2rem;
+  font-size:1.4rem; opacity:0.3;
+}
+
+/* ══ 특수 박스 ══ */
+.special-box {
+  border-radius:16px; padding:2.2rem 2rem;
+  text-align:center; max-width:740px;
+  margin:2.5rem auto 0;
+}
+
+.origin-box {
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  box-shadow:0 8px 40px rgba(200,150,62,0.3);
+  color:white;
+}
+.origin-box h3 {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1.3rem; font-weight:800;
+  margin-bottom:0.8rem; color:var(--ink);
+}
+.origin-box .hl {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1.1rem; font-weight:800;
+  color:var(--ink); display:block; margin:0.6rem 0;
+}
+.origin-box p {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.9rem; line-height:1.95;
+  color:rgba(26,18,8,0.85);
+}
+
+/* ══ 종합 메시지 밴드 ══ */
+.msg-band {
+  background:var(--ink); color:var(--rice);
+  padding:4.5rem 2rem; text-align:center;
+  position:relative; overflow:hidden;
+}
+.msg-band::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 50%, rgba(200,150,62,0.1),transparent);
+}
+.msg-band .sec-heading { color:var(--gold-light); margin-bottom:2rem; position:relative; }
+.msg-quote {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(1rem,2.5vw,1.45rem);
+  font-weight:400; line-height:2.1;
+  max-width:680px; margin:0 auto;
+  color:rgba(245,240,232,0.92);
+  position:relative;
+}
+.msg-quote::before { content:'「'; color:var(--gold); }
+.msg-quote::after  { content:'」'; color:var(--gold); }
+
+/* ══ 종합 비교 탭 ══ */
+.compare-wrap {
+  padding:4rem 2rem; max-width:1100px; margin:0 auto;
+}
+
+/* 전체 흐름 타임라인 */
+.timeline-wrap {
+  margin-bottom:4rem;
+}
+.timeline-title {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.75rem; font-weight:600;
+  letter-spacing:0.28em; color:var(--gold);
+  text-align:center; margin-bottom:2rem;
+}
+.timeline {
+  display:grid;
+  grid-template-columns:repeat(3,1fr) 60px repeat(3,1fr);
+  gap:0.6rem; align-items:center;
+}
+.t-card {
+  border-radius:14px; padding:1.6rem 0.8rem;
+  text-align:center; border:1.5px solid;
+  background:white;
+  box-shadow:0 2px 14px var(--shadow);
+  transition:transform 0.3s;
+  cursor:default;
+}
+.t-card:hover { transform:translateY(-3px); }
+
+.t-card.tc-earth   { border-color:var(--earth);   }
+.t-card.tc-wind    { border-color:var(--wind);     }
+.t-card.tc-thunder { border-color:var(--thunder);  }
+.t-card.tc-rich    { border-color:var(--rich);     }
+.t-card.tc-fire    { border-color:var(--fire);     }
+.t-card.tc-humble  { border-color:var(--humble);   }
+
+.t-card .thex { font-size:1.8rem; margin-bottom:0.35rem; }
+.t-card .tnum {
+  font-size:0.6rem; letter-spacing:0.15em;
+  margin-bottom:0.3rem;
+}
+.t-card .tc-earth   .tnum { color:var(--earth); }
+.t-card .tnum.ce { color:var(--earth); }
+.t-card .tnum.cw { color:var(--wind); }
+.t-card .tnum.ct { color:var(--thunder); }
+.t-card .tnum.cr { color:var(--rich); }
+.t-card .tnum.cf { color:var(--fire); }
+.t-card .tnum.ch { color:var(--humble); }
+
+.t-card .tname {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1rem; font-weight:800; color:var(--ink);
+}
+.t-card .tkw {
+  font-size:0.68rem; color:var(--stone);
+  margin-top:0.3rem; line-height:1.5;
+}
+.t-divider {
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:0.3rem; color:var(--stone);
+  font-size:0.6rem; letter-spacing:0.1em;
+}
+.t-divider .line {
+  width:1px; height:40px;
+  background:linear-gradient(180deg,var(--gold),rgba(139,115,85,0.2));
+}
+.t-divider .vs { color:var(--gold); font-weight:700; font-size:0.75rem; }
+
+/* 비교 카드 그리드 */
+.compare-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:2rem;
+  margin-bottom:2.5rem;
+}
+.cmp-card {
+  border-radius:18px; padding:2.2rem 2rem;
+  border:1px solid; position:relative; overflow:hidden;
+}
+.cmp-card.cA {
+  background:linear-gradient(140deg,rgba(44,95,122,0.06),rgba(92,110,58,0.04));
+  border-color:rgba(44,95,122,0.2);
+}
+.cmp-card.cB {
+  background:linear-gradient(140deg,rgba(193,68,14,0.06),rgba(122,92,30,0.04));
+  border-color:rgba(193,68,14,0.2);
+}
+.cmp-card h3 {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1.35rem; font-weight:800; margin-bottom:1.2rem;
+}
+.cmp-card.cA h3 { color:var(--wind); }
+.cmp-card.cB h3 { color:var(--fire); }
+
+.cmp-list { list-style:none; display:flex; flex-direction:column; gap:0.75rem; }
+.cmp-list li {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.85rem; line-height:1.8;
+  color:var(--ink); font-weight:300;
+  padding-left:1.2rem; position:relative;
+}
+.cmp-list li::before { content:'▸'; position:absolute; left:0; top:0.15rem; font-size:0.65rem; }
+.cmp-card.cA .cmp-list li::before { color:var(--wind); }
+.cmp-card.cB .cmp-list li::before { color:var(--fire); }
+
+/* 공통 박스 */
+.common-box {
+  background:white; border-radius:20px;
+  padding:2.5rem 2rem;
+  border:1px solid rgba(200,150,62,0.25);
+  box-shadow:0 4px 28px rgba(200,150,62,0.1);
+  margin-bottom:2rem;
+}
+.common-box h3 {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1.3rem; font-weight:800;
+  color:var(--gold); text-align:center; margin-bottom:2rem;
+}
+.common-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1.5rem;
+}
+.common-item {
+  text-align:center; padding:1.2rem 0.8rem;
+}
+.common-item .icon { font-size:1.8rem; margin-bottom:0.6rem; }
+.common-item p {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.83rem; line-height:1.8;
+  color:#444; font-weight:300;
+}
+
+/* K-MediWell 박스 */
+.kmedi-box {
+  background:linear-gradient(135deg,var(--humble),var(--humble-light));
+  border-radius:20px; padding:2.5rem 2rem;
+  text-align:center; color:white;
+}
+.kmedi-box h3 {
+  font-family:'Nanum Myeongjo',serif;
+  font-size:1.3rem; font-weight:800; margin-bottom:1rem;
+}
+.kmedi-box p {
+  font-family:'Noto Serif KR',serif;
+  font-size:0.9rem; line-height:2.1;
+  color:rgba(255,255,255,0.92); font-weight:300;
+  max-width:640px; margin:0 auto;
+}
+
+/* ══ FOOTER ══ */
+footer {
+  background:var(--ink);
+  color:rgba(245,240,232,0.45);
+  text-align:center; padding:2rem;
+  font-size:0.72rem; letter-spacing:0.1em;
+}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(22px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes float {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-10px); }
+}
+@keyframes pulse {
+  0%,100% { opacity:0.35; }
+  50%      { opacity:1; }
+}
+
+/* ══ SCROLL REVEAL ══ */
+.reveal {
+  opacity:0; transform:translateY(18px);
+  transition:opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:700px){
+  .flow-grid { grid-template-columns:1fr; }
+  .flow-arrow { transform:rotate(90deg); }
+  .compare-grid { grid-template-columns:1fr; }
+  .timeline {
+    grid-template-columns:1fr;
+    gap:0.8rem;
+  }
+  .t-divider { flex-direction:row; height:auto; gap:0.5rem; }
+  .t-divider .line { width:30px; height:1px; }
+  .group-btn { padding:0.8rem 1.2rem; font-size:0.85rem; }
+  .sub-btn { padding:0.7rem 1rem; font-size:0.76rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="hero-bg-char">易</div>
+  <p class="hero-tag">주역 64괘 탐구 · 이용근 교수 · K-MediWell 연구그룹</p>
+  <h1 class="hero-title">
+    주역 6괘<br><span class="accent">종합 탐구</span>
+  </h1>
+
+  <div class="hero-chains">
+    <span class="chain-pill" style="color:var(--earth);border-color:var(--earth);">지택림 (19)</span>
+    <span class="chain-arrow">→</span>
+    <span class="chain-pill" style="color:var(--wind);border-color:var(--wind);">풍지관 (20)</span>
+    <span class="chain-arrow">→</span>
+    <span class="chain-pill" style="color:var(--thunder);border-color:var(--thunder);">회뇌서함 (21)</span>
+    &nbsp;&nbsp;
+    <span class="chain-pill" style="color:var(--rich);border-color:var(--rich);">뇌화풍 (55)</span>
+    <span class="chain-arrow">→</span>
+    <span class="chain-pill" style="color:var(--fire);border-color:var(--fire);">화산려 (56)</span>
+    <span class="chain-arrow">→</span>
+    <span class="chain-pill" style="color:var(--humble);border-color:var(--humble);">중풍손 (57)</span>
+  </div>
+
+  <p class="hero-sub">
+    성장·관찰·융합의 흐름과<br>
+    풍요·방랑·겸손의 흐름 —<br>
+    주역이 전하는 인생 성장의 두 가지 법칙
+  </p>
+  <div class="hero-divider"></div>
+  <div class="scroll-hint">
+    <span>아래로 스크롤</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav class="group-nav">
+  <div class="group-tabs">
+    <button class="group-btn gA active" onclick="showGroup('A',this)">☴☷ 관찰·융합의 흐름 (19→20→21괘)</button>
+    <button class="group-btn gB" onclick="showGroup('B',this)">☲☶ 방랑·겸손의 흐름 (55→56→57괘)</button>
+    <button class="group-btn gc" onclick="showGroup('C',this)">✦ 종합 비교</button>
+  </div>
+  <div class="sub-tabs" id="subTabsA">
+    <button class="sub-btn active" onclick="showSub('earth',this)">☷☱ 지택림 (제19괘)</button>
+    <button class="sub-btn" onclick="showSub('wind',this)">☴☷ 풍지관 (제20괘)</button>
+    <button class="sub-btn" onclick="showSub('thunder',this)">☳☶ 회뇌서함 (제21괘)</button>
+  </div>
+  <div class="sub-tabs" id="subTabsB" style="display:none;">
+    <button class="sub-btn active" onclick="showSub('rich',this)">☳☲ 뇌화풍 (제55괘)</button>
+    <button class="sub-btn" onclick="showSub('fire',this)">☲☶ 화산려 (제56괘)</button>
+    <button class="sub-btn" onclick="showSub('humble',this)">☴☴ 중풍손 (제57괘)</button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     그룹 A
+════════════════════════════════════════ -->
+
+<!-- ── 지택림 ── -->
+<div id="tab-earth" class="section gua-earth active">
+  <div class="gua-header earth-h">
+    <div class="bg-hanja">臨</div>
+    <p class="gua-number">64괘 중 제 19괘 · 臨卦</p>
+    <div class="gua-hexagram">☷<br>☱</div>
+    <h2 class="gua-name-ko">지택림</h2>
+    <p class="gua-name-hanja">地澤臨 — 땅 위에 연못이 있어 만물을 기르고 나아가다</p>
+    <p class="gua-desc">
+      땅이 연못을 품듯 위에서 아래를 임하며 기르는 괘이다.<br>
+      모든 것이 자라나고 성장하는 계절이며,<br>
+      군자가 백성을 가르치고 포용하는 형상이다.<br>
+      성장이 충분히 이루어지면 비로소 관찰할 수 있는 풍지관으로 이어진다.
+    </p>
+  </div>
+
+  <div class="flow-section">
+    <p class="flow-label">· 괘의 전후 흐름 ·</p>
+    <div class="flow-grid">
+      <div class="flow-card reveal">
+        <div class="fhex">☷☷</div>
+        <div class="fname">중지곤 (제2괘)</div>
+        <div class="fdesc">대지의 포용<br>수용과 양육</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card current reveal">
+        <div class="fhex">☷☱</div>
+        <div class="fname">지택림 (제19괘)</div>
+        <div class="fdesc">나아가며 기름<br>성장과 육성</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card reveal">
+        <div class="fhex">☴☷</div>
+        <div class="fname">풍지관 (제20괘)</div>
+        <div class="fdesc">두루 관찰함<br>세상을 봄</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="yao-section">
+    <h2 class="sec-heading">여섯 단계의 임함</h2>
+    <p class="sec-sub">초효에서 상효까지 — 기르고 나아가는 성장의 단계</p>
+    <div class="yao-grid">
+      <div class="yao-card reveal">
+        <div class="yao-icon">🌱</div>
+        <p class="yao-num">初九 · 첫째 효</p>
+        <h3 class="yao-title">함림 (咸臨)</h3>
+        <p class="yao-body">감응하며 나아간다. 구사(九四)와 짝을 이루어 서로 호응하니, 처음 씨앗을 심듯 정성을 다해 나아가는 단계로 바르게 나아가면 길하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🌿</div>
+        <p class="yao-num">九二 · 둘째 효</p>
+        <h3 class="yao-title">함림 (咸臨)</h3>
+        <p class="yao-body">초구와 함께 감응하며 나아간다. 내면의 강건함을 유지하면서 아래를 이끄는 형상으로, 길하여 이롭지 않음이 없다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">😓</div>
+        <p class="yao-num">六三 · 셋째 효</p>
+        <h3 class="yao-title">감림 (甘臨)</h3>
+        <p class="yao-body">달콤하게만 임하려 하니 이로운 바가 없다. 달콤함에 빠져 안이하게 나아가면 허물이 생기나, 허물을 알고 근심하면 재앙은 없다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">⚖️</div>
+        <p class="yao-num">六四 · 넷째 효</p>
+        <h3 class="yao-title">지림 (至臨)</h3>
+        <p class="yao-body">지극하게 나아간다. 올바른 자리에서 아래의 초구와 호응하니, 허물이 없다. 위에서 아랫사람을 바르게 이끄는 이상적인 형상이다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🎓</div>
+        <p class="yao-num">六五 · 다섯째 효</p>
+        <h3 class="yao-title">지림 (知臨)</h3>
+        <p class="yao-body">지혜롭게 임한다. 군주의 자리에서 현명한 신하를 알아보고 쓸 줄 아는 지혜가 있으니, 대군(大君)의 마땅한 길이다. 길하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🦁</div>
+        <p class="yao-num">上六 · 여섯째 효</p>
+        <h3 class="yao-title">돈림 (敦臨)</h3>
+        <p class="yao-body">돈독하게 임한다. 풍요롭고 후덕하게 나아가니 길하고 허물이 없다. 성장의 완성 단계로, 충분히 성장한 뒤에는 관찰(觀)의 단계로 넘어간다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg-band">
+    <h2 class="sec-heading">지택림의 핵심 메시지</h2>
+    <p class="msg-quote">지택림은 성장과 육성의 괘이다. 땅 위의 연못처럼 위에서 아래를 포용하고 기르며 나아가는 힘이 충분히 쌓였을 때, 비로소 세상을 두루 관찰할 수 있는 풍지관의 단계로 이어진다.</p>
+  </div>
+</div>
+
+<!-- ── 풍지관 ── -->
+<div id="tab-wind" class="section gua-wind">
+  <div class="gua-header wind-h">
+    <div class="bg-hanja">觀</div>
+    <p class="gua-number">64괘 중 제 20괘 · 觀卦</p>
+    <div class="gua-hexagram">☴<br>☷</div>
+    <h2 class="gua-name-ko">풍지관</h2>
+    <p class="gua-name-hanja">風地觀 — 바람이 땅 위를 두루 돌아다니다</p>
+    <p class="gua-desc">
+      세상을 보는 시선은 성장함에 따라 달라진다.<br>
+      땅 위를 바람처럼 두루 돌아다니며 만물을 관찰하는 괘로서,<br>
+      지택림(성장)에서 충분히 자란 뒤 세상을 바라보고,<br>
+      그 관찰의 힘으로 융복합의 시대를 위한 토대를 마련한다.
+    </p>
+  </div>
+
+  <div class="flow-section">
+    <p class="flow-label">· 괘의 전후 흐름 ·</p>
+    <div class="flow-grid">
+      <div class="flow-card reveal">
+        <div class="fhex">☷☱</div>
+        <div class="fname">지택림 (제19괘)</div>
+        <div class="fdesc">성장과 육성<br>기르고 나아감</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card current reveal">
+        <div class="fhex">☴☷</div>
+        <div class="fname">풍지관 (제20괘)</div>
+        <div class="fdesc">두루 관찰함<br>세상의 빛을 봄</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card reveal">
+        <div class="fhex">☳☶</div>
+        <div class="fname">회뇌서함 (제21괘)</div>
+        <div class="fdesc">좋은 것 취하고<br>나쁜 것 제거</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="yao-section">
+    <h2 class="sec-heading">여섯 가지 시선의 성장</h2>
+    <p class="sec-sub">초효에서 상효까지 — 관찰하는 눈의 진화</p>
+    <div class="yao-grid">
+      <div class="yao-card reveal">
+        <div class="yao-icon">👶</div>
+        <p class="yao-num">初六 · 첫째 효</p>
+        <h3 class="yao-title">동관 (童觀)</h3>
+        <p class="yao-body">아이의 시선으로 세상을 바라본다. 순수하고 천진하나 아직은 세상의 깊이를 알지 못한다. 소인은 허물이 없으나 군자에게는 부끄러운 단계.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">👩</div>
+        <p class="yao-num">六二 · 둘째 효</p>
+        <h3 class="yao-title">규관 (闚觀)</h3>
+        <p class="yao-body">아녀자의 시선으로 문틈으로 내다보듯 세상을 관찰한다. 안에서 밖을 엿보는 제한된 시각이지만, 세심하고 섬세한 관찰력이 있다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">⚖️</div>
+        <p class="yao-num">六三 · 셋째 효</p>
+        <h3 class="yao-title">아관 (我觀)</h3>
+        <p class="yao-body">자신을 돌아보며 나아가거나 물러서야 할 때를 아는 단계. 자기 성찰을 통해 진퇴를 결정하는 지혜가 생겨나기 시작한다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🏛️</div>
+        <p class="yao-num">六四 · 넷째 효</p>
+        <h3 class="yao-title">관국지광 (觀國之光)</h3>
+        <p class="yao-body">나라의 빛을 보니 그 나라 왕의 귀빈이 된다. <strong>「觀國之光 利用賓于王」</strong> — 이 문구에서 <strong>관광(觀光)</strong>의 어원이 탄생한다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">👑</div>
+        <p class="yao-num">九五 · 다섯째 효</p>
+        <h3 class="yao-title">관천하 (觀天下)</h3>
+        <p class="yao-body">관직에 있으면서 자신이 사는 모습을 많은 사람들이 보고 따른다. 스스로를 관찰하며 천하의 사표(師表)가 되는 단계.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🌟</div>
+        <p class="yao-num">上九 · 여섯째 효</p>
+        <h3 class="yao-title">대관 (大觀)</h3>
+        <p class="yao-body">관직에서 물러나도 많은 사람들이 자신의 삶을 그대로 따르고 지킨다. 허물이 없는 완성된 인격으로 세상의 귀감이 된다.</p>
+      </div>
+    </div>
+
+    <div class="special-box origin-box reveal">
+      <h3>✦ 관광(觀光)의 어원 ✦</h3>
+      <span class="hl">「觀國之光 利用賓于王」</span>
+      <p>나라의 빛(문화·제도·풍속)을 두루 살펴보고, 그 나라 왕의 귀빈이 되는 것이 이롭다.<br>풍지관 넷째 효(六四)에서 비롯된 이 문구가 오늘날 <strong>관광(觀光)</strong>이라는 단어의 뿌리가 된다.</p>
+    </div>
+  </div>
+
+  <div class="msg-band">
+    <h2 class="sec-heading">풍지관의 핵심 메시지</h2>
+    <p class="msg-quote">풍지관괘는 세상을 주유하면서 많은 것들을 보고 배우지만 결국에는 그 모든 것들을 서로 합치는, 즉 융복합을 하는 시대를 위한 그 토대를 마련하는 괘이다.</p>
+  </div>
+</div>
+
+<!-- ── 회뇌서함 ── -->
+<div id="tab-thunder" class="section gua-thunder">
+  <div class="gua-header thunder-h">
+    <div class="bg-hanja">噬</div>
+    <p class="gua-number">64괘 중 제 21괘 · 噬嗑卦</p>
+    <div class="gua-hexagram">☳<br>☶</div>
+    <h2 class="gua-name-ko">화뇌서합</h2>
+    <p class="gua-name-hanja">火雷噬嗑 — 불과 천둥이 합쳐, 씹어 합치다</p>
+    <p class="gua-desc">
+      두루 관찰(풍지관)하여 모은 것들 중에서 나쁜 것을 제거하고 좋은 것을 취하는 괘이다.<br>
+      입 안에 음식물이 있어 씹어서 합치듯, 장애물을 없애고 하나로 합쳐나간다.<br>
+      이 과정에서 형벌과 법으로 사회의 부조리를 바로잡는 힘이 생겨난다.
+    </p>
+  </div>
+
+  <div class="flow-section">
+    <p class="flow-label">· 괘의 전후 흐름 ·</p>
+    <div class="flow-grid">
+      <div class="flow-card reveal">
+        <div class="fhex">☴☷</div>
+        <div class="fname">풍지관 (제20괘)</div>
+        <div class="fdesc">두루 관찰하고<br>세상을 봄</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card current reveal">
+        <div class="fhex">☳☶</div>
+        <div class="fname">화뇌서합 (제21괘)</div>
+        <div class="fdesc">씹어 합침<br>선별과 융합</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card reveal">
+        <div class="fhex">☶☳</div>
+        <div class="fname">산화비 (제22괘)</div>
+        <div class="fdesc">아름다움·문식<br>질서의 꾸밈</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="yao-section">
+    <h2 class="sec-heading">씹어 합치는 여섯 단계</h2>
+    <p class="sec-sub">장애물을 씹어 없애고 하나로 합치는 과정</p>
+    <div class="yao-grid">
+      <div class="yao-card reveal">
+        <div class="yao-icon">🔗</div>
+        <p class="yao-num">初九 · 첫째 효</p>
+        <h3 class="yao-title">발칙멸지 (屨校滅趾)</h3>
+        <p class="yao-body">발에 형틀을 씌워 발가락이 보이지 않는다. 가벼운 죄에 가벼운 형벌을 주는 것으로, 허물을 일찍 바로잡으면 크게 나쁠 것이 없다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🍖</div>
+        <p class="yao-num">六二 · 둘째 효</p>
+        <h3 class="yao-title">서부멸비 (噬膚滅鼻)</h3>
+        <p class="yao-body">부드러운 살을 씹으니 코까지 없어진다. 형벌이 지나치게 무거울 수 있으나 허물이 없다. 올바른 뜻을 지키면 길하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">⚡</div>
+        <p class="yao-num">六三 · 셋째 효</p>
+        <h3 class="yao-title">서석육 (噬腊肉)</h3>
+        <p class="yao-body">말린 고기를 씹다 독을 만난다. 단단하고 굳은 장애물을 제거하는 과정에서 어려움을 겪는다. 조금 부끄럽지만 허물은 없다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🦷</div>
+        <p class="yao-num">九四 · 넷째 효</p>
+        <h3 class="yao-title">서간자 (噬乾胏)</h3>
+        <p class="yao-body">뼈 있는 말린 고기를 씹어 금화살을 얻는다. 강한 장애물과 씨름하여 귀한 것을 얻는 단계. 어려움을 이겨내면 이롭고 길하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🏆</div>
+        <p class="yao-num">六五 · 다섯째 효</p>
+        <h3 class="yao-title">서건육 (噬乾肉)</h3>
+        <p class="yao-body">말린 고기를 씹어 황금을 얻는다. 군주의 자리에서 엄정하게 판단하여 황금과 같은 가치를 얻는다. 위태롭지만 끝내는 허물이 없다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🔒</div>
+        <p class="yao-num">上九 · 여섯째 효</p>
+        <h3 class="yao-title">하교멸이 (何校滅耳)</h3>
+        <p class="yao-body">목에 형틀을 쓰고 귀가 보이지 않는다. 죄를 고치지 않고 거듭하면 큰 형벌에 이른다. 경계하지 않으면 흉하다는 가장 무거운 경고.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg-band">
+    <h2 class="sec-heading">화뇌서합의 핵심 메시지</h2>
+    <p class="msg-quote">화뇌서합은 모든 것을 두루 관찰(풍지관)한 후, 나쁜 것은 씹어 없애고 좋은 것은 취하는 선별과 융합의 괘이다. 장애물을 제거하고 법과 정의를 세워, 진정한 융복합의 토대를 완성한다.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     그룹 B
+════════════════════════════════════════ -->
+
+<!-- ── 뇌화풍 ── -->
+<div id="tab-rich" class="section gua-rich">
+  <div class="gua-header rich-h">
+    <div class="bg-hanja">豐</div>
+    <p class="gua-number">64괘 중 제 55괘 · 豐卦</p>
+    <div class="gua-hexagram">☳<br>☲</div>
+    <h2 class="gua-name-ko">뇌화풍</h2>
+    <p class="gua-name-hanja">雷火豐 — 천둥과 번개가 합쳐 풍요로움을 낳다</p>
+    <p class="gua-desc">
+      천둥(☳)과 번개(☲)가 함께하여 밝음과 움직임이 극에 달하는 풍요로움의 괘이다.<br>
+      그러나 풍요가 지극하면 반드시 쇠퇴가 오듯, 화려함의 극에서<br>
+      거주지를 떠나야 하는 화산려로 이어지는 전환점을 담고 있다.<br>
+      성대한 것은 반드시 잃게 되니, 쇠퇴함을 미리 대비해야 한다.
+    </p>
+  </div>
+
+  <div class="flow-section">
+    <p class="flow-label">· 괘의 전후 흐름 ·</p>
+    <div class="flow-grid">
+      <div class="flow-card reveal">
+        <div class="fhex">☱☳</div>
+        <div class="fname">택뢰수 (제17괘)</div>
+        <div class="fdesc">따르고 수용함<br>유연한 적응</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card current reveal">
+        <div class="fhex">☳☲</div>
+        <div class="fname">뇌화풍 (제55괘)</div>
+        <div class="fdesc">천둥과 번개의<br>극도의 풍요</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card reveal">
+        <div class="fhex">☲☶</div>
+        <div class="fname">화산려 (제56괘)</div>
+        <div class="fdesc">거주지를 떠나<br>나그네가 됨</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="yao-section">
+    <h2 class="sec-heading">풍요와 쇠퇴의 여섯 단계</h2>
+    <p class="sec-sub">극에 달한 풍요가 어떻게 변화하는지를 보여주는 경계의 괘</p>
+    <div class="yao-grid">
+      <div class="yao-card reveal">
+        <div class="yao-icon">🤝</div>
+        <p class="yao-num">初九 · 첫째 효</p>
+        <h3 class="yao-title">우기배주 (遇其配主)</h3>
+        <p class="yao-body">짝이 되는 주인을 만난다. 뜻이 맞는 동료와 함께하여 풍요로운 시작을 이룬다. 서로 균형을 이루면 열흘이 지나도 허물이 없다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🌑</div>
+        <p class="yao-num">六二 · 둘째 효</p>
+        <h3 class="yao-title">풍기부 (豐其蔀)</h3>
+        <p class="yao-body">풍요로운 가운데 장막이 드리워진다. 대낮에도 북두칠성이 보일 만큼 가려지니, 불신이 생기고 나아가면 의심을 받는다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🌒</div>
+        <p class="yao-num">九三 · 셋째 효</p>
+        <h3 class="yao-title">풍기패 (豐其沛)</h3>
+        <p class="yao-body">장막이 더욱 두꺼워진다. 대낮에도 작은 별이 보일 정도로 어두워지니, 오른팔이 부러지듯 중요한 것을 잃는다. 허물은 없으나 흉하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🌘</div>
+        <p class="yao-num">九四 · 넷째 효</p>
+        <h3 class="yao-title">풍기부 (豐其蔀)</h3>
+        <p class="yao-body">다시 장막이 드리워져 대낮에도 북두칠성이 보인다. 그러나 짝이 되는 주인을 만나니 길하다. 어둠 속에서도 올바른 동반자를 찾는 것이 중요하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🏠</div>
+        <p class="yao-num">六五 · 다섯째 효</p>
+        <h3 class="yao-title">내장유경예 (來章有慶譽)</h3>
+        <p class="yao-body">빛나는 것들이 찾아오니 경사와 명예가 있다. 풍요의 절정에서 사방에서 현명한 인재들이 모여들어 길하고 기쁨이 있다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🏚️</div>
+        <p class="yao-num">上六 · 여섯째 효</p>
+        <h3 class="yao-title">풍기옥 (豐其屋)</h3>
+        <p class="yao-body">집을 크게 지어 풍성하게 하지만 집을 가리는 장막이 드리운다. 문을 엿보아도 고요하고 사람이 없으니, 삼 년이 지나도 돌아오지 않아 흉하다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg-band">
+    <h2 class="sec-heading">뇌화풍의 핵심 메시지</h2>
+    <p class="msg-quote">뇌화풍은 천둥과 번개가 합쳐져 풍요로움이 극에 달하는 괘이다. 그러나 풍요로움이 극에 이르면 반드시 쇠퇴가 찾아온다. 화려함 뒤에 거주지를 잃고 떠나야 하는 화산려의 씨앗이 이미 이 안에 담겨 있다.</p>
+  </div>
+</div>
+
+<!-- ── 화산려 ── -->
+<div id="tab-fire" class="section gua-fire">
+  <div class="gua-header fire-h">
+    <div class="bg-hanja">旅</div>
+    <p class="gua-number">64괘 중 제 56괘 · 旅卦</p>
+    <div class="gua-hexagram">☲<br>☶</div>
+    <h2 class="gua-name-ko">화산려</h2>
+    <p class="gua-name-hanja">火山旅 — 산 위에 불이 타올라 나그네가 떠돌다</p>
+    <p class="gua-desc">
+      풍요(뇌화풍)가 극에 달한 뒤, 화려함으로 인해 거주지를 잃고 방랑하게 되는 괘이다.<br>
+      타지를 떠도는 나그네의 고통 속에서 지혜를 얻고,<br>
+      그 고난을 이겨낸 후에야 겸손함(중풍손)을 배우게 된다.
+    </p>
+  </div>
+
+  <div class="flow-section">
+    <p class="flow-label">· 괘의 전후 흐름 ·</p>
+    <div class="flow-grid">
+      <div class="flow-card reveal">
+        <div class="fhex">☳☲</div>
+        <div class="fname">뇌화풍 (제55괘)</div>
+        <div class="fdesc">천둥과 번개의<br>극도의 풍요</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card current reveal">
+        <div class="fhex">☲☶</div>
+        <div class="fname">화산려 (제56괘)</div>
+        <div class="fdesc">거주지를 떠나<br>떠도는 나그네</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card reveal">
+        <div class="fhex">☴☴</div>
+        <div class="fname">중풍손 (제57괘)</div>
+        <div class="fdesc">겸손이 중복<br>만사가 형통</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="yao-section">
+    <h2 class="sec-heading">나그네의 여섯 단계</h2>
+    <p class="sec-sub">타지에서 자리를 잡아가는 고통과 지혜의 여정</p>
+    <div class="yao-grid">
+      <div class="yao-card reveal">
+        <div class="yao-icon">😰</div>
+        <p class="yao-num">初六 · 첫째 효</p>
+        <h3 class="yao-title">나그네의 시작</h3>
+        <p class="yao-body">타지에서 자리를 잡으려 하니 구차함과 재앙을 얻게 된다. 낯선 땅에서의 첫걸음은 항상 험난하고 어렵다. 뜻을 낮추어도 쉽게 받아들여지지 않는다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">💰</div>
+        <p class="yao-num">六二 · 둘째 효</p>
+        <h3 class="yao-title">노력의 결실</h3>
+        <p class="yao-body">열심히 노력하여 돈도 벌고 종복도 얻게 된다. 여관에 머물면서도 재물을 축적하고 신실한 종을 얻으니, 성실함이 결실을 맺기 시작한다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">⚡</div>
+        <p class="yao-num">九三 · 셋째 효</p>
+        <h3 class="yao-title">자만의 대가</h3>
+        <p class="yao-body">자만하게 되어 얻었던 노자와 종복을 다시 잃게 된다. 여관에 불을 지르고 종을 잃는다. 성공의 달콤함이 교만을 낳고 오히려 화를 부른다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">😟</div>
+        <p class="yao-num">九四 · 넷째 효</p>
+        <h3 class="yao-title">불안한 회복</h3>
+        <p class="yao-body">다시 노력하여 노자와 재산을 얻었지만 다시 잃을까봐 걱정이 된다. 임시 거처를 마련하고 재물을 얻지만, 마음은 여전히 불안하고 쉬지 못한다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🏹</div>
+        <p class="yao-num">六五 · 다섯째 효</p>
+        <h3 class="yao-title">버림의 지혜</h3>
+        <p class="yao-body">명예를 얻기 위해 자신의 소중한 재물을 버릴 수밖에 없는 지혜를 깨닫고 내어줄 줄 아는 단계가 된다. 꿩을 잡아 드리니 마침내 명예를 얻는다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">😭</div>
+        <p class="yao-num">上九 · 여섯째 효</p>
+        <h3 class="yao-title">상실과 울부짖음</h3>
+        <p class="yao-body">결국에는 다시 거주지의 모든 것을 잃게 되니, 나그네는 먼저 웃고 나중에는 울부짖게 된다. 새가 둥지를 불태우니 흉하다. 교만의 최종 대가이다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg-band">
+    <h2 class="sec-heading">화산려의 핵심 메시지</h2>
+    <p class="msg-quote">화산려 괘는 열심히 살았지만 결국 다시 모든 것을 잃고 떠나는 형상인 만큼 다음 괘에서는 아무리 많이 가지고 성공한다고 해도 거만하지 말고 겸손함을 배울 수 있는 토대를 마련하는 괘이다.</p>
+  </div>
+</div>
+
+<!-- ── 중풍손 ── -->
+<div id="tab-humble" class="section gua-humble">
+  <div class="gua-header humble-h">
+    <div class="bg-hanja">巽</div>
+    <p class="gua-number">64괘 중 제 57괘 · 巽卦</p>
+    <div class="gua-hexagram">☴<br>☴</div>
+    <h2 class="gua-name-ko">중풍손</h2>
+    <p class="gua-name-hanja">重風巽 — 바람이 거듭 부니 겸손하게 스며들다</p>
+    <p class="gua-desc">
+      화산려의 방랑과 고통을 이겨낸 뒤에 비로소 얻게 되는 겸손함의 괘이다.<br>
+      바람이 낮은 곳으로 스며들듯, 겸손하고 유순하게 만물에 영향을 미친다.<br>
+      겸손이 중복(重)된 형상으로 매사에 겸허하면 만사가 형통하게 된다.
+    </p>
+  </div>
+
+  <div class="flow-section">
+    <p class="flow-label">· 괘의 전후 흐름 ·</p>
+    <div class="flow-grid">
+      <div class="flow-card reveal">
+        <div class="fhex">☲☶</div>
+        <div class="fname">화산려 (제56괘)</div>
+        <div class="fdesc">거주지를 잃고<br>방랑하는 나그네</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card current reveal">
+        <div class="fhex">☴☴</div>
+        <div class="fname">중풍손 (제57괘)</div>
+        <div class="fdesc">겸손이 중복<br>만사가 형통</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-card reveal">
+        <div class="fhex">☱☱</div>
+        <div class="fname">중택태 (제58괘)</div>
+        <div class="fdesc">기쁨이 중복<br>즐거움과 화합</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="yao-section">
+    <h2 class="sec-heading">겸손히 스며드는 여섯 단계</h2>
+    <p class="sec-sub">바람처럼 낮게 스며들어 세상을 변화시키는 지혜</p>
+    <div class="yao-grid">
+      <div class="yao-card reveal">
+        <div class="yao-icon">💨</div>
+        <p class="yao-num">初六 · 첫째 효</p>
+        <h3 class="yao-title">나아가고 물러남</h3>
+        <p class="yao-body">나아가기도 하고 물러서기도 한다. 방황하며 결단하지 못하는 모습이지만, 무인(武人)의 결단을 배우면 이롭다. 겸손의 시작은 유연함이다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🛏️</div>
+        <p class="yao-num">九二 · 둘째 효</p>
+        <h3 class="yao-title">사관하용사무</h3>
+        <p class="yao-body">무당과 역술사를 자리 아래에 쓰는 것이 이롭다. 길하고 허물이 없다. 겸손하게 현자의 도움을 구하고 의지하면 모든 일이 순조롭게 풀린다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">😤</div>
+        <p class="yao-num">九三 · 셋째 효</p>
+        <h3 class="yao-title">반복지손 (頻復之巽)</h3>
+        <p class="yao-body">지나치게 겸손을 반복하면 부끄러움을 자초한다. 잃어버린 것들을 생각하며 반복하여 굽히기만 하면 부끄럽다. 겸손에도 올바른 절도가 필요하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🎯</div>
+        <p class="yao-num">六四 · 넷째 효</p>
+        <h3 class="yao-title">회망삼품 (悔亡三品)</h3>
+        <p class="yao-body">후회가 사라진다. 사냥에서 세 가지 사냥감을 얻는다. 올바른 자리에서 겸손하게 행동하니, 뉘우침이 없고 뜻하는 바를 이루어 길하다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🌟</div>
+        <p class="yao-num">九五 · 다섯째 효</p>
+        <h3 class="yao-title">정길 (貞吉)</h3>
+        <p class="yao-body">바름을 지키면 길하다. 처음에는 흉하더라도 끝에는 길하다. 군주의 자리에서 겸손함으로 새로운 시작을 도모하면, 사흘 전에 알리고 사흘 후에 시행하여 이롭다.</p>
+      </div>
+      <div class="yao-card reveal">
+        <div class="yao-icon">🙏</div>
+        <p class="yao-num">上九 · 여섯째 효</p>
+        <h3 class="yao-title">손재상하 (巽在床下)</h3>
+        <p class="yao-body">자리 아래까지 낮추어 겸손하니, 재물과 도끼를 잃는다. 지나치게 낮추는 것은 올바르지 않다. 겸손도 중도를 지켜야 하며, 비굴함은 진정한 겸손이 아니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg-band">
+    <h2 class="sec-heading">중풍손의 핵심 메시지</h2>
+    <p class="msg-quote">중풍손은 화산려의 고난을 이겨낸 뒤 얻게 되는 겸손함의 괘이다. 바람이 낮은 곳으로 스며들듯 겸손하게 세상에 영향을 미치며, 겸손이 중복된 형상으로 매사에 겸허하면 만사가 형통하게 된다.</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     종합 비교
+════════════════════════════════════════ -->
+<div id="tab-compare" class="section">
+  <div class="compare-wrap">
+    <h2 class="sec-heading" style="margin-bottom:0.4rem;">6괘 종합 비교</h2>
+    <p class="sec-sub">두 흐름의 핵심 구조와 공통 메시지</p>
+
+    <!-- 전체 흐름 타임라인 -->
+    <div class="timeline-wrap">
+      <p class="timeline-title">· 두 흐름의 전체 구조 ·</p>
+      <div class="timeline">
+        <div class="t-card tc-earth reveal">
+          <div class="thex">☷☱</div>
+          <div class="tnum ce">제 19괘</div>
+          <div class="tname">지택림</div>
+          <div class="tkw">성장 · 육성 · 나아감</div>
+        </div>
+        <div class="t-card tc-wind reveal">
+          <div class="thex">☴☷</div>
+          <div class="tnum cw">제 20괘</div>
+          <div class="tname">풍지관</div>
+          <div class="tkw">관찰 · 시선 · 융합</div>
+        </div>
+        <div class="t-card tc-thunder reveal">
+          <div class="thex">☳☶</div>
+          <div class="tnum ct">제 21괘</div>
+          <div class="tname">화뇌서합</div>
+          <div class="tkw">선별 · 제거 · 완성</div>
+        </div>
+
+        <div class="t-divider reveal">
+          <div class="line"></div>
+          <div class="vs">VS</div>
+          <div class="line"></div>
+        </div>
+
+        <div class="t-card tc-rich reveal">
+          <div class="thex">☳☲</div>
+          <div class="tnum cr">제 55괘</div>
+          <div class="tname">뇌화풍</div>
+          <div class="tkw">풍요 · 화려 · 경고</div>
+        </div>
+        <div class="t-card tc-fire reveal">
+          <div class="thex">☲☶</div>
+          <div class="tnum cf">제 56괘</div>
+          <div class="tname">화산려</div>
+          <div class="tkw">방랑 · 고통 · 지혜</div>
+        </div>
+        <div class="t-card tc-humble reveal">
+          <div class="thex">☴☴</div>
+          <div class="tnum ch">제 57괘</div>
+          <div class="tname">중풍손</div>
+          <div class="tkw">겸손 · 유순 · 형통</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 두 흐름 비교 -->
+    <div class="compare-grid">
+      <div class="cmp-card cA reveal">
+        <h3>☴☷ 관찰·융합의 흐름 (19→20→21)</h3>
+        <ul class="cmp-list">
+          <li><strong>지택림(19):</strong> 땅 위의 연못처럼 기르고 성장시키는 힘을 축적</li>
+          <li><strong>풍지관(20):</strong> 바람이 땅을 두루 다니듯 세상 만물을 관찰·탐구</li>
+          <li><strong>화뇌서합(21):</strong> 좋은 것은 취하고 나쁜 것은 씹어 없애는 선별</li>
+          <li>성장 → 관찰 → 융합의 상향식 진화</li>
+          <li><strong>관광(觀光)의 어원</strong> — 나라의 빛을 보는 것</li>
+          <li>핵심 가치: 성장, 지식, 융복합</li>
+          <li>인생의 상반기 — 배우고 쌓는 단계</li>
+        </ul>
+      </div>
+      <div class="cmp-card cB reveal">
+        <h3>☲☶ 방랑·겸손의 흐름 (55→56→57)</h3>
+        <ul class="cmp-list">
+          <li><strong>뇌화풍(55):</strong> 천둥·번개의 극도 풍요 — 절정과 쇠퇴의 경고</li>
+          <li><strong>화산려(56):</strong> 풍요가 깨진 뒤 타지를 떠도는 나그네의 고난</li>
+          <li><strong>중풍손(57):</strong> 고난을 이겨낸 후 바람처럼 스며드는 겸손</li>
+          <li>풍요 → 상실 → 겸손의 하향식 성찰</li>
+          <li><strong>나그네(旅)의 지혜</strong> — 고통이 가르치는 겸허함</li>
+          <li>핵심 가치: 겸손, 성찰, 균형</li>
+          <li>인생의 하반기 — 내려놓고 비우는 단계</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 공통 메시지 -->
+    <div class="common-box reveal">
+      <h3>✦ 두 흐름의 공통 메시지 ✦</h3>
+      <div class="common-grid">
+        <div class="common-item">
+          <div class="icon">🌍</div>
+          <p>세상을 직접 <strong>발로 돌아다니며</strong> 보고 배우는 것이 진정한 지혜의 원천</p>
+        </div>
+        <div class="common-item">
+          <div class="icon">🔄</div>
+          <p>모든 괘는 <strong>이전 괘의 결과이자</strong> 다음 괘의 씨앗 — 끊임없는 변화의 연속</p>
+        </div>
+        <div class="common-item">
+          <div class="icon">⚖️</div>
+          <p>풍요(豐)와 방랑(旅), 관찰(觀)과 융합(噬) — <strong>극과 극이 서로를 완성</strong>시킨다</p>
+        </div>
+        <div class="common-item">
+          <div class="icon">🙏</div>
+          <p>두 흐름 모두 결국 <strong>겸손과 융합</strong>으로 귀결 — 지식과 경험의 최종 목적지</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- K-MediWell 연결 -->
+    <div class="kmedi-box reveal">
+      <h3>✦ K-MediWell 치유관광과의 연결 ✦</h3>
+      <p>
+        풍지관의 「관국지광(觀國之光)」에서 비롯된 <strong>관광(觀光)</strong>은 단순한 여행이 아니다.<br>
+        지택림의 성장 → 풍지관의 관찰 → 화뇌서합의 융합으로 이어지는 흐름은<br>
+        한국 치유관광 자원을 깊이 관찰하고 체험하여 융복합하는 K-MediWell의 철학과 일치한다.<br><br>
+        동시에 화산려의 방랑과 고통, 중풍손의 겸손함은<br>
+        치유 여행이 단순한 관광을 넘어 <strong>자기 성찰과 내면의 회복</strong>을 이끄는<br>
+        진정한 웰니스 경험임을 주역의 언어로 증명한다.
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>주역 64괘 탐구 — 지택림 · 풍지관 · 화뇌서합 · 뇌화풍 · 화산려 · 중풍손</p>
+  <p style="margin-top:0.4rem;font-size:0.62rem;opacity:0.5;">이용근 교수 · 공주대학교 스마트의료웰니스관광학과 · K-MediWell 연구그룹 · 자연치유관광포럼</p>
+</footer>
+
+<script>
+const allSubs = ['earth','wind','thunder','rich','fire','humble','compare'];
+
+function showGroup(g, btn) {
+  document.querySelectorAll('.group-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('subTabsA').style.display = 'none';
+  document.getElementById('subTabsB').style.display = 'none';
+
+  allSubs.forEach(s => {
+    const el = document.getElementById('tab-' + s);
+    if (el) el.classList.remove('active');
+  });
+
+  if (g === 'A') {
+    document.getElementById('subTabsA').style.display = 'flex';
+    // 현재 활성 서브탭 찾아 표시
+    const activeSubA = document.querySelector('#subTabsA .sub-btn.active');
+    const target = activeSubA ? activeSubA.getAttribute('onclick').match(/'(\w+)'/)[1] : 'earth';
+    document.getElementById('tab-' + target).classList.add('active');
+  } else if (g === 'B') {
+    document.getElementById('subTabsB').style.display = 'flex';
+    const activeSubB = document.querySelector('#subTabsB .sub-btn.active');
+    const target = activeSubB ? activeSubB.getAttribute('onclick').match(/'(\w+)'/)[1] : 'rich';
+    document.getElementById('tab-' + target).classList.add('active');
+  } else {
+    document.getElementById('tab-compare').classList.add('active');
+  }
+
+  window.scrollTo({ top: document.querySelector('.group-nav').offsetTop, behavior: 'smooth' });
+  setTimeout(triggerReveal, 150);
+}
+
+function showSub(tab, btn) {
+  // 어느 그룹 서브탭인지 판단
+  const parentRow = btn.closest('.sub-tabs');
+  parentRow.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  allSubs.forEach(s => {
+    const el = document.getElementById('tab-' + s);
+    if (el) el.classList.remove('active');
+  });
+  document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo({ top: document.querySelector('.group-nav').offsetTop, behavior: 'smooth' });
+  setTimeout(triggerReveal, 150);
+}
+
+// 스크롤 reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.08 });
+
+function triggerReveal() {
+  document.querySelectorAll('.section.active .reveal').forEach(el => {
+    observer.observe(el);
+    // 이미 화면에 있으면 즉시 표시
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('visible');
+    }
+  });
+}
+
+// 초기 실행
+document.addEventListener('DOMContentLoaded', () => {
+  triggerReveal();
+});
+window.addEventListener('scroll', triggerReveal);
+</script>
+</body>
+</html>
